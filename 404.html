@@ -305,6 +305,51 @@
 
   
   
+    <div id="runtime" style="margin-top: 10px; text-align: center; font-size: 0.9em;">
+      <span id="runtime-text">本站已运行</span>
+    </div>
+    <script type="text/javascript">
+      (function() {
+        var startDate = 'Tue Nov 18 2025 08:00:00 GMT+0800 (中国标准时间)';
+        var startTime = new Date(startDate).getTime();
+        var now = new Date().getTime();
+        var diff = now - startTime;
+        
+        if (diff < 0) {
+          document.getElementById('runtime-text').innerText = '本站即将启动';
+          return;
+        }
+        
+        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        var text = '本站已运行 ' + days + ' 天 ' + hours + ' 小时 ' + minutes + ' 分 ' + seconds + ' 秒';
+        document.getElementById('runtime-text').innerText = text;
+        
+        // 每秒更新
+        setInterval(function() {
+          seconds++;
+          if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes >= 60) {
+              minutes = 0;
+              hours++;
+              if (hours >= 24) {
+                hours = 0;
+                days++;
+              }
+            }
+          }
+          var text = '本站已运行 ' + days + ' 天 ' + hours + ' 小时 ' + minutes + ' 分 ' + seconds + ' 秒';
+          document.getElementById('runtime-text').innerText = text;
+        }, 1000);
+      })();
+    </script>
+  
+  
 </div>
 
   </footer>
