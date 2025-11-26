@@ -1,0 +1,14 @@
+.post-metric {
+  margin-left: 12px;
+  display: inline-flex;
+  align-items: center;
+  color: #718096;
+  font-size: 0.9em;
+}
+.post-metric i {
+  margin-right: 4px;
+  font-size: 0.95em;
+}
+[data-user-color-scheme="dark"] .post-metric {
+  color: #a7a9ad;
+}
