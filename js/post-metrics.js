@@ -7,7 +7,6 @@ function initPostMetrics() {
 
   const apiBase = buildApiBase(lc);
   const headers = buildHeaders(lc);
-  fetchTotalViews(apiBase, headers);
 
   const pathMap = new Map();
   cards.forEach(card => {
@@ -107,38 +106,4 @@ function normalizePath(pathname) {
   } catch (e) {
     return normalized;
   }
-}
-
-let totalViewsCountEl;
-
-function ensureTotalViewsSlot() {
-  if (totalViewsCountEl) return totalViewsCountEl;
-  const container = document.querySelector('.statistics');
-  if (!container) return null;
-  let wrapper = document.querySelector('#post-metrics-total-views');
-  if (!wrapper) {
-    wrapper = document.createElement('span');
-    wrapper.id = 'post-metrics-total-views';
-    wrapper.className = 'post-total-views';
-    wrapper.innerHTML = '总阅读量 <span class="count">--</span> 次';
-    wrapper.style.display = 'none';
-    container.appendChild(wrapper);
-  }
-  totalViewsCountEl = wrapper.querySelector('.count');
-  return totalViewsCountEl;
-}
-
-function fetchTotalViews(apiBase, headers) {
-  const countEl = ensureTotalViewsSlot();
-  if (!countEl) return;
-  fetch(`${apiBase}/classes/Counter?limit=1000`, { headers })
-    .then(res => res.json())
-    .then(data => {
-      if (!data?.results) return;
-      const total = data.results.reduce((sum, item) => sum + (item.time || 0), 0);
-      countEl.textContent = total;
-      const wrapper = document.querySelector('#post-metrics-total-views');
-      if (wrapper) wrapper.style.display = 'inline';
-    })
-    .catch(err => console.warn('[post-metrics] fetch total views failed:', err));
 }
