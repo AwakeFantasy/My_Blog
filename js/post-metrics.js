@@ -31,8 +31,12 @@ function initPostMetrics() {
 
   const pathMap = new Map();
   cards.forEach(card => {
-    const meta = card.querySelector('.index-post-meta');
-    const link = card.querySelector('.index-card-title');
+    const meta = card.querySelector('.index-post-meta')
+      || card.querySelector('.index-btm.post-metas')
+      || card.querySelector('.index-btm');
+    const link = card.querySelector('.index-card-title')
+      || card.querySelector('.index-header a')
+      || card.querySelector('a[href]');
     if (!meta || !link) return;
     const path = new URL(link.getAttribute('href'), window.location.origin).pathname;
     pathMap.set(path, meta);
