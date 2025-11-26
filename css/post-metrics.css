@@ -12,3 +12,13 @@
 [data-user-color-scheme="dark"] .post-metric {
   color: #a7a9ad;
 }
+.post-total-views,
+.post-total-words {
+  margin-left: 12px;
+  color: #718096;
+  font-size: 0.9em;
+}
+[data-user-color-scheme="dark"] .post-total-views,
+[data-user-color-scheme="dark"] .post-total-words {
+  color: #a7a9ad;
+}
