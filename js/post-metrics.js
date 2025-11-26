@@ -1,7 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+  waitForAV()
+    .then(() => initPostMetrics())
+    .catch(err => console.warn('[post-metrics] AV init failed:', err));
+});
+
+function waitForAV() {
+  if (window.AV) return Promise.resolve(window.AV);
+  return new Promise((resolve, reject) => {
+    let tries = 0;
+    const timer = setInterval(() => {
+      if (window.AV) {
+        clearInterval(timer);
+        resolve(window.AV);
+      } else if (++tries > 50) {
+        clearInterval(timer);
+        reject(new Error('AV not found within timeout'));
+      }
+    }, 120);
+  });
+}
+
+function initPostMetrics() {
   const cards = Array.from(document.querySelectorAll('.index-card'));
   if (!cards.length || !window.CONFIG?.web_analytics?.leancloud) return;
-  if (!window.AV) return;
 
   const lc = window.CONFIG.web_analytics.leancloud;
   if (!AV.applicationId) {
@@ -24,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchViews(paths, pathMap);
   fetchComments(paths, pathMap);
-});
+}
 
 function appendMetric(container, type, path, iconClass) {
   if (container.querySelector(`.post-metric[data-metric="${type}"][data-path="${path}"]`)) return;
