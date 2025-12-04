@@ -29,7 +29,7 @@
 <meta property="og:description" content="关于做量化系统遇到的数据获取难题，爬虫与反爬虫，前复权后的数据增量更新。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-01T15:52:47.000Z">
-<meta property="article:modified_time" content="2025-12-02T06:17:14.386Z">
+<meta property="article:modified_time" content="2025-12-04T09:55:59.377Z">
 <meta property="article:author" content="awakefantasy">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="股票">
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          745 字
+          1.8k 字
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          7 分钟
+          16 分钟
         
       </span>
     
@@ -322,6 +322,22 @@
 <li>再找找其他方案，但是其他方案存不存在就不好说了，可以从linuxdo，github这几个项目的issue里面找找，也可以问问ai</li>
 </ol>
 <h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>如标题所说，这也只是难题1，还有难题2难题3难题。。。还没写上来，之前没做过这么大的项目，确实对自己的技术有很大提升。不管做不做得出来，先做着吧，发现问题解决问题的过程是很有意思的~</p>
+<h3 id="后续1"><a href="#后续1" class="headerlink" title="后续1"></a>后续1</h3><p>按计划走了一遍，12基本行不通，除非我自己爬虫相关技术升级了^_^，但是按3走倒是有了不错的结果。</p>
+<h4 id="解决方法一"><a href="#解决方法一" class="headerlink" title="解决方法一"></a>解决方法一</h4><p>在github的mootdx中的issues中，看到了很多人对mootdx库的讨论，本身mootdx是支持前复权数据的，但是因为mootdx实现上有点问题导致前复权计算出错了，可以看这个<a target="_blank" rel="noopener" href="https://github.com/mootdx/mootdx/pull/135">fix: 修复复权计算问题 by longguzzz · Pull Request #135 · mootdx&#x2F;mootdx</a>，按这个修改mootdx库的话，就可以做到获取复权后的数据了，而且印象中mootdx库数据获取效率很高，是个不错的解决方案。问题是每个配置我的系统的人，都需要去修改mootdx的库，这太麻烦了。</p>
+<h4 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h4><p>在akshare和efinance的issues里面有很多人讨论爬不了数据了之后该何去何从，于是看见一篇这样的文章：<a target="_blank" rel="noopener" href="https://github.com/Micro-sheep/efinance/discussions/226">我是如何应对使用 efinance 被限流 · Micro-sheep&#x2F;efinance · Discussion #226</a>，从里面看到了个陌生面孔：baostock，于是我就去看了看baostock是何方神圣，于是找到了它的说明文档：<a target="_blank" rel="noopener" href="http://baostock.com/mainContent?file=home.md">www.baostock.com</a>，按照里面样例测试了下，确实不要钱（2025-12-03），短期内符合我的要求。问题是未来如果收费后就麻烦了，又得重新配置。</p>
+<h4 id="解决办法三"><a href="#解决办法三" class="headerlink" title="解决办法三"></a>解决办法三</h4><p>直接氪金启动tushare，一劳永逸，老牌库的含金量与优势啊。</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>短时间来说，可以先用baostock做替代品，长期来看，很多人做的系统选择tushare或者选择券商通道的数据，这都是不错的选择。爬虫类数据源短期内可能还是比较难用了。</p>
+<h3 id="后续2"><a href="#后续2" class="headerlink" title="后续2"></a>后续2</h3><p>一般来说，我还是更希望使用不泄露个人信息的方法（不用注册的方法）来做一个项目，所以才会优先考虑akshare这类爬虫类数据源，考虑到baostock以后可能会引入收费，思来想去我还是不打算用这个。个人最后计划还是使用tushare，120积分可以获得日线接口，但是要填写个人信息（不过没有验证^_^），属于是偷懒了。</p>
+<p>最后总结下吧，这些数据源各自的优势和劣势：</p>
+<ol>
+<li>akshare&#x2F;efinance，老牌爬虫类数据源，优点在于把爬虫搞好了的话（issues里面说代理池什么的，我不是很懂），获取高频数据也可以有很高效率，缺点在于最近它所支持的数据源基本都升级了反爬，直接用来爬日线数据的话，东财数据源爬不了，其他两个数据源要做好爬3个小时的准备，efinance我没用过，不过看issues里面和akshare基本一样。</li>
+<li>mootdx，也是爬虫类的数据源，针对通达信做的，优点是爬日线效率很高，大概10分钟就能搞定全市场数据爬取，缺点是作者很久很久没更新了，而且官网也无法访问了。它目前的前复权（后复权我没用过不清楚）数据有问题，原因是复权计算出错了，按照<a target="_blank" rel="noopener" href="https://github.com/mootdx/mootdx/pull/135">上文github的链接</a>里面的方法修改应该就能搞定。</li>
+<li>通达信本身，通达信提供<a target="_blank" rel="noopener" href="https://www.tdx.com.cn/article/vipdata.html">全市场日线数据的下载渠道</a>，爱折腾的话这也是一个很不错的数据源。</li>
+<li>各个券商的量化接口，我没用过不评价，看网上别人的使用来说，日线数据绰绰有余，但是实时数据可能有延迟。</li>
+<li>tushare，也是老牌数据源，但是它走的是注册付费制的道路，优点很明显，数据质量有保障，氪金足够的话高频量化也支持，缺点就是要钱。</li>
+<li>baostock之类的比较小众的数据源，优点是前面的优点，缺点是小众不主流。这类数据源就见仁见智了。</li>
+</ol>
+<p>研究了这么久，本来只是打算简单的做个量化系统，结果要变成股票数据市场调研了，不得不说高频率低延迟获取效率高且优值的数据一直是人们所追求的，而对于我这种只想找日线数据的人来说这些东西没啥作用。</p>
 
                 
               </div>
@@ -388,7 +404,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年12月2日</div>
+          <div>2025年12月4日</div>
         </div>
       
       
