@@ -21,23 +21,22 @@
   <meta name="author" content="awakefantasy">
   <meta name="keywords" content="Hexo, 博客, 编程, 闲聊">
   
-    <meta name="description" content="关于做量化系统遇到的难题，系统内各种类，方法的问题">
+    <meta name="description" content="如标题所示，突然发现边上同学要考研初试了，才发现距离那个时候，已经一年了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="量化系统难题2_结构">
-<meta property="og:url" content="https://www.awakefantasy.top/2025/12/02/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%9A%BE%E9%A2%982-%E7%BB%93%E6%9E%84/">
+<meta property="og:title" content="原来考研上岸已经一年了">
+<meta property="og:url" content="https://www.awakefantasy.top/2025/12/04/%E5%8E%9F%E6%9D%A5%E8%80%83%E7%A0%94%E4%B8%8A%E5%B2%B8%E5%B7%B2%E7%BB%8F%E4%B8%80%E5%B9%B4%E4%BA%86/">
 <meta property="og:site_name" content="awakefantasy的小博客">
-<meta property="og:description" content="关于做量化系统遇到的难题，系统内各种类，方法的问题">
+<meta property="og:description" content="如标题所示，突然发现边上同学要考研初试了，才发现距离那个时候，已经一年了。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-02T10:18:40.000Z">
-<meta property="article:modified_time" content="2025-12-02T11:00:36.848Z">
+<meta property="article:published_time" content="2025-12-04T14:01:51.000Z">
+<meta property="article:modified_time" content="2025-12-04T14:04:36.956Z">
 <meta property="article:author" content="awakefantasy">
-<meta property="article:tag" content="python">
-<meta property="article:tag" content="股票">
+<meta property="article:tag" content="个人故事">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>量化系统难题2_结构 - awakefantasy的小博客</title>
+  <title>原来考研上岸已经一年了 - awakefantasy的小博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -220,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="量化系统难题2_结构"></span>
+            <span id="subtitle" data-typed-text="原来考研上岸已经一年了"></span>
           
         </div>
 
@@ -231,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-02 18:18" pubdate>
-          2025年12月2日 晚上
+        <time datetime="2025-12-04 22:01" pubdate>
+          2025年12月4日 晚上
         </time>
       </span>
     
@@ -243,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          787 字
+          861 字
         
       </span>
     
@@ -254,7 +253,7 @@
         
         
         
-          7 分钟
+          8 分钟
         
       </span>
     
@@ -300,21 +299,24 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">量化系统难题2_结构</h1>
+            <h1 id="seo-header">原来考研上岸已经一年了</h1>
             
             
               <div class="markdown-body">
                 
-                <p>关于做量化系统遇到的难题，系统内各种类，方法的问题</p>
+                <p>如标题所示，突然发现边上同学要考研初试了，才发现距离那个时候，已经一年了。</p>
 <span id="more"></span>
 
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>时光飞逝，转眼间几小时就过去了，而我却没有研究怎么改好数据，而是在这写系统结构的问题。这是为什么呢？因为我实在没头绪，不如先把这篇博客写好。</p>
-<h3 id="难题"><a href="#难题" class="headerlink" title="难题"></a>难题</h3><p>对于一个经验丰富的开发者来说，这应该不是什么难题，但是对我来说是个问题。问题是这样的，我的目的是建立一个日k级别的量化分析系统，能够做到市场数据获取，策略回测，策略定义，指标定义，结果可视化，等等功能。由于这是我第一次做包含这么多东西的项目，所以就在类，方法之间的相互依赖关系这个问题上犯了难。</p>
-<p>有哪些问题呢？举几个例子，数据获取我定义了两个类，一个是基于akshare做的数据爬取fetcher类，一个是负责本地数据管理的local_storage类，此刻我定义一个数据获取方法get_data我该定义在哪，怎样合理复用这两个类中的方法？如果我更新了数据爬取的方法，会不会对所有依赖它的方法造成影响？</p>
-<p>类似的，我又定义了一个批量获取数据的方法，此时我是否要复用get_data？如果不复用get_data的话，一般是需要对获取过程做单独的优化，比如数据获取时优先使用哪个源。</p>
-<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>做这种问题其实是一种思维的转变，面向过程是一条线，如：获取数据→回测策略（可选）→可视化分析（可选）→根据策略生成买卖点，创建一个文件从头写到尾就可以解决问题。但是这种模式在需要测试不同的策略的时候就会出现问题，这也就催促我们把各种方法封装好。</p>
-<p>而面向对象则是一张网，每一个步骤都可能调用上一步的任何一个方法，这是不止是对代码能力的考验，也是对系统整体架构思路清晰与否的考验。</p>
-<p>当时想着做这个系统之前，其实我只是想做个选股器，但是做个选股器就需要检验策略，检验策略又需要数据，检验结果又需要可视化，数据存储形式需要优化，数据也需要增量更新，回测又需要高效率，选股结果又需要生成个报告，生成报告又需要接入大模型，大模型报告中间又需要加入图表，没完没了了，某种角度上，这个项目名称称为apeiria_stock还真没毛病，因为apeiria寓意为无限嘛，各种问题没完没了也是一种无限😂。至于为什么名叫apeiria_stock，其实很简单，因为流景之海的艾佩莉娅这个游戏剧情我很喜欢，自然也就把女主的名字拿来用了。</p>
+
+<p>早上看见草上结了冰，急匆匆的走向教室上课，寒冷而干燥的风刮过我的脸，我才想起，原来已经考研上岸已经一年了。每次看见“北邮”这两个字，都会有微微的不真实感，并不是我觉得考上了很感动，而是很惊讶时间过得这么快。</p>
+<p>去年的这时候我在干什么呢？走过昏黄的小路，还在和家里人视频通话的同时，我不禁这样想着。去年这时候啊，2024年12月4日，那个时候我应该是嘴中吐着寒气，在早上一边吃着卷饼一边做408吧。不抱着对未来的幻想，只是一味的做题，到了晚上，打两把游戏就继续做题去了。</p>
+<p>谁能想到呢？二战的我和一战的我相比是如此开摆，暑期连着打几天fc25，晚上更是玩神之天平玩到凌晨三点，和老同学玩三角洲，第1赛季打到摸金和大战场两个模式的最高段位，考研的两天还在玩fc滚卡，研究滚出来的冬野的球员卡有没有用得上的。那段时间仿佛如梦幻泡影一般，伸手去触摸其中的细节，一碰却一丝也不剩了。</p>
+<p>如此开摆，如此混乱，却成功的考上研了，一方面是感谢自己的积累和不太算高强度的复习，一方面是我那一届真的不卷，也许这也是一种命运吧，二战松松散散上岸，一战拼命努力却一事无成。</p>
+<p>一战的时候在干什么呢？一战考华科，生活中除了学习已经失去了一切，就连一天复习结束回去洗澡都会产生新鲜感，走路的时候会细看瓷砖的每一处纹理，生活中一切与考研无关的事务都变成了灰色。无数次想从教学楼中一跃而下，却最后还是咬牙坚持了下来，可以说，一战的时候什么都没干，也只干了一件事吧。考研分数出来，我开心，因为比往年进复试高了20分，复试名单出来，我绝望，因为复试线比往年高了10分，而只高10分的分数段的同学，大多数都被淘汰了。</p>
+<p>坐在这书写文字，我才发现，原来上岸已经一年了，无论是一战拼命的自己，还是二战轻松的自己，都变成了云雾。</p>
+<p>如果问我考研收获了什么，诚然，时光在这两年如同静止，堪称毫无收获，但是我觉得，如果选择了这条路，那就把它做好做到底，也许命运暂时不站在你这边，但是当命运偏袒你时，要抓住这个机会。也许这些想法就是我的收获吧。</p>
+<p>考研是痛苦的，它更像一场修行，也许读这段文字的你也在考研，也许你边上有很多质疑的声音，走下去吧，总有阳光明媚的那一天（虽然考上了之后压力也不小就是了😂）</p>
+<p>记录于12月4日夜，“原来考研上岸已经一年了”</p>
 
                 
               </div>
@@ -333,7 +335,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F/" class="category-chain-item">量化系统</a>
+  <a href="/categories/%E6%83%B3%E5%88%B0%E5%93%AA%E5%86%99%E5%88%B0%E5%93%AA/" class="category-chain-item">想到哪写到哪</a>
   
   
 
@@ -348,9 +350,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/python/" class="print-no-link">#python</a>
-      
-        <a href="/tags/%E8%82%A1%E7%A5%A8/" class="print-no-link">#股票</a>
+        <a href="/tags/%E4%B8%AA%E4%BA%BA%E6%95%85%E4%BA%8B/" class="print-no-link">#个人故事</a>
       
     </div>
   
@@ -362,8 +362,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>量化系统难题2_结构</div>
-      <div>https://www.awakefantasy.top/2025/12/02/量化系统难题2-结构/</div>
+      <div>原来考研上岸已经一年了</div>
+      <div>https://www.awakefantasy.top/2025/12/04/原来考研上岸已经一年了/</div>
     </div>
     <div class="license-meta">
       
@@ -375,13 +375,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月2日</div>
+          <div>2025年12月4日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年12月2日</div>
+          <div>2025年12月4日</div>
         </div>
       
       
@@ -412,18 +412,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/04/%E5%8E%9F%E6%9D%A5%E8%80%83%E7%A0%94%E4%B8%8A%E5%B2%B8%E5%B7%B2%E7%BB%8F%E4%B8%80%E5%B9%B4%E4%BA%86/" title="原来考研上岸已经一年了">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">原来考研上岸已经一年了</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/01/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%9A%BE%E9%A2%981-%E6%95%B0%E6%8D%AE/" title="量化系统难题1_数据">
-                        <span class="hidden-mobile">量化系统难题1_数据</span>
+                      <a href="/2025/12/02/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%9A%BE%E9%A2%982-%E7%BB%93%E6%9E%84/" title="量化系统难题2_结构">
+                        <span class="hidden-mobile">量化系统难题2_结构</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
