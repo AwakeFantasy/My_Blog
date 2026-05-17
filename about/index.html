@@ -78,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.awakefantasy.top","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"~","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"Sg6zY8ZdSYlbk3zWHBD4MZyU-gzGzoHsz","app_key":"4GJyueQihtV5hScY5AZ61pVO","server_url":"https://sg6zy8zd.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.awakefantasy.top","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"~","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"Sg6zY8ZdSYlbk3zWHBD4MZyU-gzGzoHsz","app_key":"4GJyueQihtV5hScY5AZ61pVO","server_url":"https://sg6zy8zd.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -100,6 +100,11 @@
   
     
   
+
+  
+    
+  
+
 
 
 
@@ -126,7 +131,7 @@
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
-    <!-- Collapsible content -->
+    <!-- Collapsible content (desktop) -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto text-center">
         
@@ -210,6 +215,109 @@
   </div>
 </nav>
 
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
   
 
 <div id="banner" class="banner" parallax=true
@@ -230,6 +338,8 @@
     </div>
   </div>
 </div>
+
+
 
 </div>
 
@@ -315,7 +425,7 @@
 <p>内耗极度严重，严重的时候会感觉世界失去了颜色🙈，也好像听不见声音🙉，无论有没有事情发生都会内耗，找不到原因也找不到解决方法，不过不妨碍我对长远未来的乐观和干活的效率^_^。</p>
 <p><a href="/2025/11/25/%E4%B8%AA%E4%BA%BA%E7%BB%8F%E5%8E%86-%E6%95%85%E4%BA%8B/">我的故事</a><br><a href="/2025/11/25/%E5%8D%9A%E5%AE%A2%E8%A3%85%E4%BF%AE%E6%97%A5%E8%AE%B0/">博客历史</a></p>
 <p>如果你好奇我的mbti，我是：INTJ</p>
-<p>如果你想要联系我，请用邮箱联系我，地址：<a href="mailto:&#97;&#x77;&#x61;&#x6b;&#101;&#x66;&#x61;&#110;&#x74;&#x61;&#115;&#x79;&#x31;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#109;">awakefantasy1@gmail.com</a></p>
+<p>如果你想要联系我，请用邮箱联系我，地址：<a href="mailto:&#97;&#119;&#x61;&#x6b;&#101;&#x66;&#x61;&#x6e;&#x74;&#97;&#115;&#x79;&#49;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">awakefantasy1@gmail.com</a></p>
 <p>为什么是awakefantasy1呢？因为awakefantasy被我搞丢了😭，邮箱我会定时查看的~</p>
 <p>为什么是用邮箱联系而不是给其他联系方式呢？因为其他联系方式我觉得好麻烦😋，当然有必要的时候也可以在邮件中注明需要联系方式。</p>
 <h2 id="关于兴趣爱好："><a href="#关于兴趣爱好：" class="headerlink" title="关于兴趣爱好："></a>关于兴趣爱好：</h2><p>平常喜欢打游戏，股票，看书，看鸟，散步，也算半个二次元。为什么是半个呢，因为你看我的id：AwakeFantasy，一半醒着一半幻想，人总不能总是活在幻想中，总是要从梦里醒过来，无论再怎么逃避，现实就是现实，它就在那，无论有多痛苦。</p>
@@ -439,51 +549,6 @@
 
   
   
-    <div id="runtime" style="margin-top: 10px; text-align: center; font-size: 0.9em;">
-      <span id="runtime-text">本站已运行</span>
-    </div>
-    <script type="text/javascript">
-      (function() {
-        var startDate = 'Tue Nov 18 2025 18:51:00 GMT+0800 (中国标准时间)';
-        var startTime = new Date(startDate).getTime();
-        var now = new Date().getTime();
-        var diff = now - startTime;
-        
-        if (diff < 0) {
-          document.getElementById('runtime-text').innerText = '本站即将启动';
-          return;
-        }
-        
-        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        var text = '本站竟然已经运行了 ' + days + ' 天 ' + hours + ' 小时 ' + minutes + ' 分 ' + seconds + ' 秒';
-        document.getElementById('runtime-text').innerText = text;
-        
-        // 每秒更新
-        setInterval(function() {
-          seconds++;
-          if (seconds >= 60) {
-            seconds = 0;
-            minutes++;
-            if (minutes >= 60) {
-              minutes = 0;
-              hours++;
-              if (hours >= 24) {
-                hours = 0;
-                days++;
-              }
-            }
-          }
-          var text = '本站竟然已经运行了 ' + days + ' 天 ' + hours + ' 小时 ' + minutes + ' 分 ' + seconds + ' 秒';
-          document.getElementById('runtime-text').innerText = text;
-        }, 1000);
-      })();
-    </script>
-  
-  
 </div>
 
   </footer>
@@ -522,6 +587,7 @@
       
     })(window, document);
   </script>
+
 
 
 
@@ -586,6 +652,8 @@
   <script>Fluid.plugins.imageCaption();</script>
 
   <script defer src="/js/leancloud.js" ></script>
+
+  <script defer src="/js/openkounter.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

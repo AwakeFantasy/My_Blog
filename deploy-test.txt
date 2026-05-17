@@ -1,0 +1,3 @@
+deploy smoke test
+version: 0.0.1
+date: 2026-05-17
