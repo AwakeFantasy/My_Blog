@@ -71,29 +71,16 @@ html:not([data-user-color-scheme]) #banner.banner-theme-swap::after {
   z-index: 0;
 }
 
-html[data-user-color-scheme="dark"] #banner.banner-theme-swap.banner-theme-dark::before,
-html[data-user-color-scheme="light"] #banner.banner-theme-swap.banner-theme-dark::before,
-html:not([data-user-color-scheme]) #banner.banner-theme-swap.banner-theme-dark::before {
+html[data-user-color-scheme="dark"] #banner.banner-theme-swap::before {
   opacity: 0;
   transform: scale(1.06);
   filter: brightness(0.9) saturate(0.95);
 }
 
-html[data-user-color-scheme="dark"] #banner.banner-theme-swap.banner-theme-dark::after,
-html[data-user-color-scheme="light"] #banner.banner-theme-swap.banner-theme-dark::after,
-html:not([data-user-color-scheme]) #banner.banner-theme-swap.banner-theme-dark::after {
+html[data-user-color-scheme="dark"] #banner.banner-theme-swap::after {
   opacity: 1;
   transform: scale(1);
   filter: brightness(1) saturate(1.02);
-}
-
-html[data-user-color-scheme="dark"] #banner.banner-theme-swap.banner-theme-no-transition::before,
-html[data-user-color-scheme="light"] #banner.banner-theme-swap.banner-theme-no-transition::before,
-html:not([data-user-color-scheme]) #banner.banner-theme-swap.banner-theme-no-transition::before,
-html[data-user-color-scheme="dark"] #banner.banner-theme-swap.banner-theme-no-transition::after,
-html[data-user-color-scheme="light"] #banner.banner-theme-swap.banner-theme-no-transition::after,
-html:not([data-user-color-scheme]) #banner.banner-theme-swap.banner-theme-no-transition::after {
-  transition: none;
 }
 
 html[data-user-color-scheme="dark"] #banner .full-bg-img,
