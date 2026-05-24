@@ -5,6 +5,10 @@ function initDarkThemeBanner() {
   if (!banner) return;
 
   const lightImage = extractBannerImage(banner.style.backgroundImage) || '/img/m1.png';
+  const normalizedLightImage = lightImage.replace(/[#?].*$/, '');
+  const defaultLightImages = new Set(['/img/m1.png', '/img/default.png']);
+  if (!defaultLightImages.has(normalizedLightImage)) return;
+
   const darkImage = '/img/dark-theme-night-sky.png';
   let transitionToken = 0;
   let transitionTimer = null;
