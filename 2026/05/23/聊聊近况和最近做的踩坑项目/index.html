@@ -21,23 +21,33 @@
   <meta name="author" content="awakefantasy">
   <meta name="keywords" content="Hexo, 博客, 编程, 闲聊">
   
-    <meta name="description" content="量化系统开发中遇到的系统架构设计难题。探讨面向过程与面向对象编程的区别，解决类与方法之间的依赖关系、代码复用、数据获取类设计等系统结构问题，分享日K级别量化分析系统的架构思考。">
+    <meta name="description" content="久违更新一下近况，顺便记录最近做的几个项目、踩坑过程和一些阶段性体会。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="量化系统难题2_结构">
-<meta property="og:url" content="https://www.awakefantasy.top/2025/12/02/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%9A%BE%E9%A2%982-%E7%BB%93%E6%9E%84/">
+<meta property="og:title" content="聊聊近况和最近做的踩坑项目">
+<meta property="og:url" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/">
 <meta property="og:site_name" content="awakefantasy的小博客 - 记录技术学习、量化交易与生活思考的个人博客">
-<meta property="og:description" content="量化系统开发中遇到的系统架构设计难题。探讨面向过程与面向对象编程的区别，解决类与方法之间的依赖关系、代码复用、数据获取类设计等系统结构问题，分享日K级别量化分析系统的架构思考。">
+<meta property="og:description" content="久违更新一下近况，顺便记录最近做的几个项目、踩坑过程和一些阶段性体会。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-02T10:18:40.000Z">
-<meta property="article:modified_time" content="2025-12-26T07:57:03.388Z">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523145350737.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/18_layout_overlay.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523151414286.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/28_left_meld_vs_river_overlay.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523150803650.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523152122513.png">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523145902976.png">
+<meta property="article:published_time" content="2026-05-23T06:35:17.000Z">
+<meta property="article:modified_time" content="2026-05-24T09:27:29.757Z">
 <meta property="article:author" content="awakefantasy">
-<meta property="article:tag" content="python">
-<meta property="article:tag" content="股票">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="个人故事">
+<meta property="article:tag" content="图像识别">
+<meta property="article:tag" content="日麻">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.awakefantasy.top/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523145350737.png">
   
   
   
-  <title>量化系统难题2_结构 - awakefantasy的小博客 - 记录技术学习、量化交易与生活思考的个人博客</title>
+  <title>聊聊近况和最近做的踩坑项目 - awakefantasy的小博客 - 记录技术学习、量化交易与生活思考的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -329,7 +339,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="量化系统难题2_结构"></span>
+            <span id="subtitle" data-typed-text="聊聊近况和最近做的踩坑项目"></span>
           
         </div>
 
@@ -340,8 +350,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-02 18:18" pubdate>
-          2025年12月2日 晚上
+        <time datetime="2026-05-23 14:35" pubdate>
+          2026年5月23日 下午
         </time>
       </span>
     
@@ -352,7 +362,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          941 字
+          2.5k 字
         
       </span>
     
@@ -363,7 +373,7 @@
         
         
         
-          8 分钟
+          21 分钟
         
       </span>
     
@@ -410,21 +420,63 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">量化系统难题2_结构</h1>
+            <h1 id="seo-header">聊聊近况和最近做的踩坑项目</h1>
             
             
               <div class="markdown-body">
                 
-                <p>关于做量化系统遇到的难题，系统内各种类，方法的问题</p>
-<span id="more"></span>
+                <p>好久好久好久没写博客了，上次写博客已经是一年前的事情了，聊聊什么情况吧。</p>
+<h2 id="所以先说说近况"><a href="#所以先说说近况" class="headerlink" title="所以先说说近况"></a>所以先说说近况</h2><p>大家好我是awakefantasy，去年发完那一篇之后我整个人就处于放假状态中了，结果当然是狠狠玩了一个寒假，一回来被自己整笑了。怎么又是啥也没干啊。当然你要说什么也没干也不对，毕竟会打麻将了，同时也把《天津罪》，《人狼村之谜》，《奥伯拉丁的回归》，《重返蓝鲸岛》这些作品的剧情完完整整的过了一遍。（这不还是什么都没干吗喂！！）</p>
+<p>所以说呢，3月回来北京，看了下校园论坛里面大伙已经争先恐后的开始找实习了，也算是有点焦虑吧，就开始自己想办法做一些项目了。</p>
+<p>当然我这人是不喜欢为了找工作而做项目的，那种对着别人已经做出来的东西再抄一遍，然后写在简历上，我实在觉得没用太大的意义，也就只能提升自己的技术水平了。我要做的东西一定要有真实需求，起码得可能有人用吧。</p>
+<h2 id="然后说说最近做的东西"><a href="#然后说说最近做的东西" class="headerlink" title="然后说说最近做的东西"></a>然后说说最近做的东西</h2><p>我很感谢我的室友，机缘巧合之下看到他用codex，听他做了介绍之后，我仿佛踏进了新的世界，有了这个利器之后，我的想法可以以一个恐怖的速度变成产品，很快最初的设想我就开始投身实践了，那就是基于视觉识别的日麻助手。</p>
+<img src="/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523145350737.png" srcset="/img/loading.gif" lazyload class="" title="image-20260523145350737">
 
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>时光飞逝，转眼间几小时就过去了，而我却没有研究怎么改好数据，而是在这写系统结构的问题。这是为什么呢？因为我实在没头绪，不如先把这篇博客写好。</p>
-<h3 id="难题"><a href="#难题" class="headerlink" title="难题"></a>难题</h3><p>对于一个经验丰富的开发者来说，这应该不是什么难题，但是对我来说是个问题。问题是这样的，我的目的是建立一个日k级别的量化分析系统，能够做到市场数据获取，策略回测，策略定义，指标定义，结果可视化，等等功能。由于这是我第一次做包含这么多东西的项目，所以就在类，方法之间的相互依赖关系这个问题上犯了难。</p>
-<p>有哪些问题呢？举几个例子，数据获取我定义了两个类，一个是基于akshare做的数据爬取fetcher类，一个是负责本地数据管理的local_storage类，此刻我定义一个数据获取方法get_data我该定义在哪，怎样合理复用这两个类中的方法？如果我更新了数据爬取的方法，会不会对所有依赖它的方法造成影响？</p>
-<p>类似的，我又定义了一个批量获取数据的方法，此时我是否要复用get_data？如果不复用get_data的话，一般是需要对获取过程做单独的优化，比如数据获取时优先使用哪个源。</p>
-<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>做这种问题其实是一种思维的转变，面向过程是一条线，如：获取数据→回测策略（可选）→可视化分析（可选）→根据策略生成买卖点，创建一个文件从头写到尾就可以解决问题。但是这种模式在需要测试不同的策略的时候就会出现问题，这也就催促我们把各种方法封装好。</p>
-<p>而面向对象则是一张网，每一个步骤都可能调用上一步的任何一个方法，这是不止是对代码能力的考验，也是对系统整体架构思路清晰与否的考验。</p>
-<p>当时想着做这个系统之前，其实我只是想做个选股器，但是做个选股器就需要检验策略，检验策略又需要数据，检验结果又需要可视化，数据存储形式需要优化，数据也需要增量更新，回测又需要高效率，选股结果又需要生成个报告，生成报告又需要接入大模型，大模型报告中间又需要加入图表，没完没了了，某种角度上，这个项目名称称为apeiria_stock还真没毛病，因为apeiria寓意为无限嘛，各种问题没完没了也是一种无限😂。至于为什么名叫apeiria_stock，其实很简单，因为流景之海的艾佩莉娅这个游戏剧情我很喜欢，自然也就把女主的名字拿来用了。</p>
+<p>很不幸，之前对话被我整没了（其实能恢复，但是因为也不做这个项目了就懒得再去恢复了），我没有办法还原这个项目的实践过程。简单说一下这个项目的实践思路：牌桌识别，包括手牌+牌河+各家副露识别→麻将引擎决策→实时提供切牌推荐，当然我主要考虑的使用场景是雀魂的牌谱中，所以截图也基本上由牌谱获取。如下这张图是我标的识别区域。</p>
+<img src="/2026/05/23/聊聊近况和最近做的踩坑项目/18_layout_overlay.png" srcset="/img/loading.gif" lazyload  alt="18_layout_overlay" style="zoom:33%;" />
+
+<p>之前从来没做过图像识别的任务，愣头青就这样冲进了一个完全未知的领域。由于经验严重不足，可以说是每做一步都出了很多毛病。当然也得出了很多经验吧，这个就之后再说。</p>
+<p>首先是数据标注，这活我只能说干一次就踏实了，再也不想干了，我让codex给我写了个标注工具，但是依然每局都要标上几十个麻将牌，在我标了几百个麻将牌之后我突然意识到了一个问题。</p>
+<p>那就是我没有考虑这个牌桌是三维的^_^，导致每家的牌都长得不一样，比如下图，是我标的部分3索。</p>
+<img src="/2026/05/23/聊聊近况和最近做的踩坑项目/image-20260523151414286.png" srcset="/img/loading.gif" lazyload  alt="image-20260523151414286" style="zoom:80%;" />
+
+<p>标完之后还是我训练之后才发现的这个问题。查出来给我气笑了。</p>
+<p>没办法，那就把整个牌桌做投影变换，重新标注呗。下图是投影变换之后的图，当然不是这一局的，但是你能看见起码牌没有形变和奇奇怪怪的朝向了</p>
+<img src="/2026/05/23/聊聊近况和最近做的踩坑项目/28_left_meld_vs_river_overlay.png" srcset="/img/loading.gif" lazyload  alt="28_left_meld_vs_river_overlay" style="zoom: 33%;" />
+
+<p>所以我又标注了一版，如下：</p>
+<img src="/2026/05/23/聊聊近况和最近做的踩坑项目/image-20260523150803650.png" srcset="/img/loading.gif" lazyload  alt="image-20260523150803650" style="zoom: 80%;" />
+
+<p>说实话，标注的时候，我还不觉得有什么问题，标注完一看我惊了，丫的怎么一个个要么是竹竿要么是胖子，怎么回事呢？</p>
+<p>当时直接拿现象问gpt5.4，无果，没办法，随开始盘查实现逻辑。当然，逻辑也是让ai一段段给我忠实翻译的。</p>
+<p>直到发现。。。我投影变换的比例不对，我期望用的是正方形的投影变换，ai用的是长方形的投影变换。</p>
+<p>给我气晕了，修改逻辑，变正常了，再标注一版。标注后的文件不见了，拿另一个代替：</p>
+<img src="/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523152122513.png" srcset="/img/loading.gif" lazyload class="" title="image-20260523152122513">
+
+<p>很明显，起码牌没有莫名其妙的形变了对不对？没有为形变的退场而哀悼，下一个赶到战场的是——牌面阴影！</p>
+<p>这正是把我项目压垮的最后一步，做到这一步时我已经反反复复的标注了n次牌了，注意到这个的时候我晕了过去，我克服了立直横牌的处理，克服了极为稀缺的红宝牌牌桌的样本，却没有克服这个神奇的阴影。你可以注意到，这里面有很多牌的牌面，和它阴影部分的颜色几乎一模一样。当时我的脑海里面只剩下了毁灭吧世界。我尝试了调整二值图的参数，尝试了单独调整颜色，总之是没成功。（其实并不是不能解决，但是实在没动力去做了，因为仔细一想也没必要做这个牌张识别）</p>
+<p>此时我发现了已经有自动启动网页端打牌的项目了<a target="_blank" rel="noopener" href="https://github.com/latorc/MahjongCopilot">MahjongCopilot</a>，我直接投降，不做了不做了。下图是做这个项目中产生的各种各样的实验的中间产物。</p>
+<img src="/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/image-20260523145902976.png" srcset="/img/loading.gif" lazyload class="" title="image-20260523145902976">
+
+<p>这个项目最后牌河识别精度大概是95%左右，但是我觉得实在是不具有太大实用性，所以就没做了。一张牌的识别错误会导致一堆问题，这一块就放下了。</p>
+<h2 id="所以说经验和教训呢"><a href="#所以说经验和教训呢" class="headerlink" title="所以说经验和教训呢"></a>所以说经验和教训呢</h2><p>这个项目给我的教训和经验是很多的，下面逐条展开吧。</p>
+<p>1，vibecoding的时候，一定要对实现目标，实现架构，实现方法，具有清晰的认识，ai不是许愿机，不是丢进去一个目标就能出来结果。模糊不清的描述，省略过程的描述，都可能造成很大的麻烦，比如我这里投影变换的问题，实现的时候我没有审查，实现之后标注完了才注意到牌张比例不对，这个时候就已经浪费了很多的时间了。</p>
+<p>对应的，解决方法就是在每个功能实现的时候，自己要清楚实现方法，目标，架构，在描述清楚的情况下让ai作业，避免“帮我实现一个xxx功能”这种描述，在自己清楚实现细节的情况下尽可能描述细节，不清楚细节的情况下多与ai讨论实现思路和策略，对自己这一轮做出来的东西有清楚的认识。</p>
+<p>比如：</p>
+<p>我：“我想实现一个xxx功能，你有什么计划吗？”</p>
+<p>GPT：“架构如下：。。。。”</p>
+<p>我：“架构中xxx功能具体怎么实现？”</p>
+<p>GPT：“。。。。”</p>
+<p>我：“明白了，那xxx功能的这个实现中，可能会出现怎么样的问题？”</p>
+<p>GPT：“。。。。”</p>
+<p>多次讨论清楚细节之后再放权让它根据前面讨论的内容实现，实现之后立马测试。</p>
+<p>总之就是你自己要清楚你的这个项目是怎么实现的，全部放权给ai只会越做越乱。</p>
+<p>2，在自己新做一个项目的时候，要避免闷头就开始做，在开始落实到第一行代码之前，要去看看相似功能的产品是怎么做的，他们是怎么实现的。</p>
+<p>比如我这个麻将项目，在别人已经有做好的项目的情况下再去重复造轮子，浪费时间。</p>
+<p>那怎么做呢，在一个点子出现的同时，把问题交给ai，让它查查有没有什么相似的实现，以及可能有关联的项目，现在的主流ai的网络搜索能力都很强了，很快就能把网上的相关信息都看一遍再总结给你，我们再点进去看一下别人怎么做的就好了。</p>
+<p>3，时刻关注技术的进步，时刻更新自己的工作流，时刻优化自己工作的方式，这个没什么好说的，多看看别人怎么用ai就行。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这应该是近况（一）我应该还会写几篇近况，毕竟可不止做了这一个东西。真要说技术提升了多少，那我还真不知道，但你要说技术没提升，那也只能说不可能。（啊对的对的，啊不对不对既视感）</p>
+<p>总之祝读到这的你们天天开心，我继续vibecoding去了。</p>
 
                 
               </div>
@@ -443,7 +495,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F/" class="category-chain-item">量化系统</a>
+  <a href="/categories/%E6%83%B3%E5%88%B0%E5%93%AA%E5%86%99%E5%88%B0%E5%93%AA/" class="category-chain-item">想到哪写到哪</a>
   
   
 
@@ -458,9 +510,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/python/" class="print-no-link">#python</a>
+        <a href="/tags/%E4%B8%AA%E4%BA%BA%E6%95%85%E4%BA%8B/" class="print-no-link">#个人故事</a>
       
-        <a href="/tags/%E8%82%A1%E7%A5%A8/" class="print-no-link">#股票</a>
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" class="print-no-link">#图像识别</a>
+      
+        <a href="/tags/%E6%97%A5%E9%BA%BB/" class="print-no-link">#日麻</a>
       
     </div>
   
@@ -472,8 +528,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>量化系统难题2_结构</div>
-      <div>https://www.awakefantasy.top/2025/12/02/量化系统难题2-结构/</div>
+      <div>聊聊近况和最近做的踩坑项目</div>
+      <div>https://www.awakefantasy.top/2026/05/23/聊聊近况和最近做的踩坑项目/</div>
     </div>
     <div class="license-meta">
       
@@ -485,13 +541,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月2日</div>
+          <div>2026年5月23日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年12月26日</div>
+          <div>2026年5月24日</div>
         </div>
       
       
@@ -522,18 +578,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/04/%E5%8E%9F%E6%9D%A5%E8%80%83%E7%A0%94%E4%B8%8A%E5%B2%B8%E5%B7%B2%E7%BB%8F%E4%B8%80%E5%B9%B4%E4%BA%86/" title="原来考研上岸已经一年了">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">原来考研上岸已经一年了</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/01/%E9%87%8F%E5%8C%96%E7%B3%BB%E7%BB%9F%E9%9A%BE%E9%A2%981-%E6%95%B0%E6%8D%AE/" title="量化系统难题1_复权后的日k数据_已解决">
-                        <span class="hidden-mobile">量化系统难题1_复权后的日k数据_已解决</span>
+                      <a href="/2025/12/16/%E8%81%8A%E8%81%8A%E4%B8%80%E4%BA%9B%E5%85%B3%E4%BA%8E%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%83%BD%E5%8A%9B/" title="聊聊一些关于信息收集的能力">
+                        <span class="hidden-mobile">聊聊一些关于信息收集的能力</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
