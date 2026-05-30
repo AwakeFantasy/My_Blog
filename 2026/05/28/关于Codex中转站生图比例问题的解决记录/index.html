@@ -1,0 +1,1055 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head><!-- hexo injector head_begin start --><meta name="msvalidate.01" content="ACB78B1189815CFB683FF79D95A7DADA" />
+<meta name="baidu-site-verification" content="codeva-v82xsnwLsT" />
+<!-- hexo injector head_begin end -->
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apeiria512x512.png">
+  <link rel="icon" href="/img/apeiria512x512.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="awakefantasy">
+  <meta name="keywords" content="Hexo, 博客, 编程, 闲聊">
+  
+    <meta name="description" content="记录一次从 Codex 中转站生图比例、分辨率不稳定的问题出发，到做出 relay-imagegen Skill 的完整过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Codex中转站生图比例问题的解决记录">
+<meta property="og:url" content="https://www.awakefantasy.top/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/">
+<meta property="og:site_name" content="awakefantasy的小博客 - 记录技术学习、量化交易与生活思考的个人博客">
+<meta property="og:description" content="记录一次从 Codex 中转站生图比例、分辨率不稳定的问题出发，到做出 relay-imagegen Skill 的完整过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.awakefantasy.top/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/xiaoa-01-cover-size-parameter.png">
+<meta property="article:published_time" content="2026-05-28T11:45:44.000Z">
+<meta property="article:modified_time" content="2026-05-30T09:31:54.391Z">
+<meta property="article:author" content="awakefantasy">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="Skill">
+<meta property="article:tag" content="中转站">
+<meta property="article:tag" content="生图">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.awakefantasy.top/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/xiaoa-01-cover-size-parameter.png">
+  
+  
+  
+  <title>关于Codex中转站生图比例问题的解决记录 - awakefantasy的小博客 - 记录技术学习、量化交易与生活思考的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/blog-polish.css">
+<link rel="stylesheet" href="/css/post-metrics.css">
+<link rel="stylesheet" href="/css/dark-theme-night-sky.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.awakefantasy.top","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"~","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"Sg6zY8ZdSYlbk3zWHBD4MZyU-gzGzoHsz","app_key":"4GJyueQihtV5hScY5AZ61pVO","server_url":"https://sg6zy8zd.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Awakefantasy的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner banner-theme-swap" parallax=true
+     style="--banner-light-image: url(&#39;/img/m1.png&#39;); --banner-dark-image: url(&#39;/img/dark-theme-night-sky.png&#39;); background-color: #050812; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="关于Codex中转站生图比例问题的解决记录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-28 19:45" pubdate>
+          2026年5月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">关于Codex中转站生图比例问题的解决记录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这篇文章记录一个最近折腾出来的小工具：<a target="_blank" rel="noopener" href="https://github.com/AwakeFantasy/relay-imagegen">relay-imagegen</a>。</p>
+<span id="more"></span>
+
+<h2 id="问题是怎么冒出来的"><a href="#问题是怎么冒出来的" class="headerlink" title="问题是怎么冒出来的"></a>问题是怎么冒出来的</h2><p>事情的起因很简单：我codex用的中转，同时我想让 Codex 帮我生图，而且希望它真的能按照我说的比例和分辨率出图。比如我说“16:9 横屏 4K”，它就应该老老实实传 <code>3840x2160</code>，而不是在 prompt 里写一句“please make it 16:9 and 4K”之后祈祷模型听话。</p>
+<p>结果一开始当然是没那么听话。如下图：我让它出个4k的图</p>
+<img src="/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/image-20260528210837444.png" srcset="/img/loading.gif" lazyload class="" title="image-20260528210837444">
+
+<p>然后我到文件夹里面一看：1536x864算什么4k啊？</p>
+<img src="/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/image-20260528211017204.png" srcset="/img/loading.gif" lazyload class="" title="image-20260528211017204">
+
+<p>我：红温😡。</p>
+<p>这个问题如果只是偶尔出一两张图，其实也无所谓。但是我自己用的时候，给我低分辨率也就算了，要求16：9给我个方图，那我就急了。</p>
+<p>所以我需要的不是一个“更会画图的 prompt”，而是一个更像工程工具的，<strong>稳定的</strong>出图流程。</p>
+<img src="/2026/05/28/关于Codex中转站生图比例问题的解决记录/xiaoa-02-prompt-vs-size.png" srcset="/img/loading.gif" lazyload  alt="prompt-vs-size" style="zoom: 33%;" />
+
+<h2 id="原始时代"><a href="#原始时代" class="headerlink" title="原始时代"></a>原始时代</h2><p>在我开始思考做一个skill之前，是怎么出图的呢？</p>
+<p>答案是给codex自己的key和中转的地址，让它自己用我的key和中转地址调用imagegen cli出图。</p>
+<p>结果几乎每一次换对话都需要我单独给它强调一遍key和地址，太麻烦了。</p>
+<p>于是就有了自动化的想法。</p>
+<h2 id="第一个想法：直接走中转站"><a href="#第一个想法：直接走中转站" class="headerlink" title="第一个想法：直接走中转站"></a>第一个想法：直接走中转站</h2><p>我用 Codex 本身就是通过中转站，所以第一反应是：那图片生成是不是也可以直接走同一个中转站？</p>
+<p>这里遇到的第一个小问题是 key。</p>
+<p>正常 OpenAI SDK&#x2F;CLI 喜欢读：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">OPENAI_API_KEY<br>OPENAI_BASE_URL<br></code></pre></td></tr></table></figure>
+
+<p>但我不想把 <code>OPENAI_API_KEY</code> 写成系统环境变量。一方面不够干净，另一方面我本机还用了 ccswitch，这玩意在我本机系统变量写了key的时候会警告。我的目标是：key 只在本次出图进程里出现，跑完就结束，不进入系统环境，不进入命令行参数，不进入记录文件。</p>
+<p>一开始的方案很朴素：把中转站配置写进一个 JSON 文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;api_key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;base_url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://relay.example/v1&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;model&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;gpt-image-2&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后写一个包装脚本，运行时读取这个 JSON，把 key 注入子进程环境，再调用 Codex 自带的 imagegen CLI。</p>
+<p>也就是说，它不是一开始就自己实现图片 API，而是先做了一层包装：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">relay-imagegen<br>  -&gt; 读取中转站配置<br>  -&gt; 准备 prompt、输出路径、参考图<br>  -&gt; 临时设置 OPENAI_API_KEY / OPENAI_BASE_URL<br>  -&gt; 调用 Codex 自带 imagegen<br>  -&gt; 校验尺寸<br>  -&gt; 写 meta 记录<br></code></pre></td></tr></table></figure>
+
+<img src="/2026/05/28/关于Codex中转站生图比例问题的解决记录/xiaoa-03-relay-wrapper.png" srcset="/img/loading.gif" lazyload  alt="relay-wrapper" style="zoom:33%;" />
+
+<h2 id="然后开始把流程做成-Skill"><a href="#然后开始把流程做成-Skill" class="headerlink" title="然后开始把流程做成 Skill"></a>然后开始把流程做成 Skill</h2><p>一开始只是一个脚本，但是每次都要和 Codex 解释“配置文件在哪、输出到哪、怎么传参考图、怎么传 4K”也很烦。</p>
+<p>于是我干脆把它做成了一个 Codex Skill，叫：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">relay-imagegen<br></code></pre></td></tr></table></figure>
+
+<p>核心目标不是“这个 Skill 会画图”，因为原生 imagegen 本来就会画图。它真正解决的是周边流程：</p>
+<ol>
+<li>读取中转站配置。</li>
+<li>不把 key 写进系统环境变量。</li>
+<li>明确传递 <code>--size</code>，让比例和分辨率稳定下来。</li>
+<li>把 prompt 存成文件。</li>
+<li>每次出图写一份 <code>.meta.json</code>。</li>
+<li>记录 prompt snapshot、模型、尺寸、输入图、输出图、耗时。</li>
+<li>参考图太大时先压缩再上传。</li>
+</ol>
+<p>效果大概是这样：</p>
+<img src="/2026/05/28/%E5%85%B3%E4%BA%8ECodex%E4%B8%AD%E8%BD%AC%E7%AB%99%E7%94%9F%E5%9B%BE%E6%AF%94%E4%BE%8B%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/relay-imagegen-result.png" srcset="/img/loading.gif" lazyload class="" title="relay-imagegen-result">
+
+<p>这里面我比较满意的是，最后输出不是一句“图好了”，而是能明确知道：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">模式是 edit<br>尺寸校验通过<br>用了几张参考图<br>输出文件在哪<br>元数据在哪<br>prompt 文件在哪<br></code></pre></td></tr></table></figure>
+
+<p>这就从“聊天里跑了一张图”变成了“本地有一次可追溯的出图记录”。</p>
+<img src="/2026/05/28/关于Codex中转站生图比例问题的解决记录/xiaoa-05-traceable-record.png" srcset="/img/loading.gif" lazyload  alt="traceable-record" style="zoom: 33%;" />
+
+<h2 id="优化中转输入配置"><a href="#优化中转输入配置" class="headerlink" title="优化中转输入配置"></a>优化中转输入配置</h2><p>一开始配置文件是手写 JSON。后来我发现这对别人来说还是有点麻烦，尤其是已经在用 Codex 中转站的人。</p>
+<p>既然 Codex 本身已经能通过中转站工作，那为什么不直接读 Codex 当前配置呢？</p>
+<p>现在这个 Skill 的默认读取顺序是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">1. 显式传入 --config<br>2. Codex 当前配置：~/.codex/config.toml + ~/.codex/auth.json<br>3. ccswitch 当前 Codex provider<br>4. 私有 JSON 配置<br></code></pre></td></tr></table></figure>
+
+<p>也就是说，如果你的 Codex 已经通过中转站跑起来了，那大概率不需要再配置任何 key。脚本会读：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">~/.codex/config.toml<br>~/.codex/auth.json<br></code></pre></td></tr></table></figure>
+
+<p>从 <code>config.toml</code> 里拿当前 provider 的 <code>base_url</code>，从 <code>auth.json</code> 里拿 <code>OPENAI_API_KEY</code>。当然，输出时只会显示脱敏 key，不会把明文 key 打出来。</p>
+<p>ccswitch 这块也踩了一个很有意思的坑。</p>
+<p>我做好了一个版本，自信满满的拿给我的小伙伴用，结果他那边出图卡了，找他拿到了对话记录后才发现，他那边读取的中转url不对😂，应该读到主站才对，居然读到hk开头的站了。于是开始查程序逻辑。</p>
+<p>读取 ccswitch 的 endpoint 时，是从 <code>provider_endpoints</code> 表里拿最后一个 URL。结果最后一个 endpoint 是类似 <code>hk.relay.example</code> 这样的备用节点，但是这个节点是失败的，于是 Skill 就误读了一个不能用的地址。</p>
+<p>所以就只能修改逻辑了：</p>
+<ol>
+<li>优先读 ccswitch 当前 provider 配置文本里的 <code>base_url</code>。</li>
+<li>只有没有 <code>base_url</code> 时，才 fallback 到 endpoint 列表。</li>
+</ol>
+<p>只能说在发现问题时，还是要快速定位问题发现的位置，在ai辅助下这个过程其实挺快的。</p>
+<h2 id="提示词记录其实很重要"><a href="#提示词记录其实很重要" class="headerlink" title="提示词记录其实很重要"></a>提示词记录其实很重要</h2><p>做着做着，我发现这个工具最有用的地方不只是尺寸控制，还有提示词记录。</p>
+<p>很多时候出图不是一次完成的，而是这样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">第一版：角色站在灯下<br>第二版：背景更现实一点<br>第三版：镜头拉近，人物更大<br>第四版：柔焦光源，背景虚化<br></code></pre></td></tr></table></figure>
+
+<p>如果这些 prompt 全都散在聊天里，等过几天再看，基本上就只剩“这图怎么来的来着？”。</p>
+<p>所以现在的流程是使用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">prompts/xxx.txt<br></code></pre></td></tr></table></figure>
+
+<p>并且每次成功出图时，<code>.meta.json</code> 里会保存当次的 <code>prompt_snapshot</code>。这样即使之后 prompt 文件被改了，某一次出图实际用过的提示词也还在记录里。</p>
+<p>这点对我来说非常关键。因为图片生成本身有随机性，如果连输入 prompt 都没保存，后面就完全没法知道图怎么来的了。</p>
+<p>当然这也带来一个隐私问题：prompt 可能包含私密内容。所以后面如果继续完善，我可能会加：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">--prompt-snapshot full|hash|none<br></code></pre></td></tr></table></figure>
+
+<p>这样公开分享记录时可以选择只保存 hash，或者不保存完整 prompt。</p>
+<h2 id="这东西和原生-imagegen-差别在哪呢？"><a href="#这东西和原生-imagegen-差别在哪呢？" class="headerlink" title="这东西和原生 imagegen 差别在哪呢？"></a>这东西和原生 imagegen 差别在哪呢？</h2><p>这个问题我自己也问过。</p>
+<p>原生 imagegen 更像是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">图片生成 CLI<br></code></pre></td></tr></table></figure>
+
+<p>而 relay-imagegen 更像是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">中转站图片工作流管理器<br></code></pre></td></tr></table></figure>
+
+<p>原生 imagegen 关心的是“能不能生成图”。relay-imagegen 关心的是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs text">key 从哪里来<br>base_url 从哪里来<br>尺寸有没有真的传进去<br>输出放在哪里<br>prompt 有没有保存<br>参考图有没有预处理<br>这次运行有没有记录<br>这个记录会不会泄露 key<br></code></pre></td></tr></table></figure>
+
+<p>所以它不是要替代原生 imagegen，而是把我这种中转站用户常用的一整套流程封装起来。</p>
+<p>如果你只用官方 OpenAI，而且只是偶尔让 Codex 出一张图，那原生能力够用了。</p>
+<p>但如果你像我一样：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">用中转站<br>希望复用 Codex 当前配置<br>不想设置系统环境变量 key<br>需要固定比例和分辨率<br>经常用参考图<br>想保留 prompt 和输出记录<br></code></pre></td></tr></table></figure>
+
+<p>那这个 Skill 就会顺手很多。</p>
+<h2 id="开源"><a href="#开源" class="headerlink" title="开源"></a>开源</h2><p>既然做成了 Skill，我就顺手把它丢到了 GitHub：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/AwakeFantasy/relay-imagegen">https://github.com/AwakeFantasy/relay-imagegen</a></p>
+<p>当然它现在还不是一个特别“稳固抽象”的项目。有人审查时就指出过，它目前还是包装 Codex 内置 imagegen CLI，而不是自己直接调用 Images API 或 Responses API。从长期维护角度看，这确实是一个耦合点。</p>
+<p>我觉得理想的版本应该分成几层：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">配置解析层<br>图片客户端层<br>运行记录层<br>Codex Skill 层<br></code></pre></td></tr></table></figure>
+
+<p>甚至未来可以支持：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">backend = bundled_cli<br>backend = images_api<br>backend = responses_tool<br></code></pre></td></tr></table></figure>
+
+<p>但我现在觉得，先把真实工作流跑顺，比一开始就做一个大的重要。毕竟这个工具的诞生，本来就是因为我真的要用，真的被比例、分辨率、提示词记录这些问题折磨了。</p>
+<h2 id="最后总结一下"><a href="#最后总结一下" class="headerlink" title="最后总结一下"></a>最后总结一下</h2><p>这次小工具给我的感受是：很多时候真正影响 AI 工作流体验的，不是模型本身能力不够，而是周边流程不够稳定。</p>
+<p>你在对话里写了一大段 prompt，它可能留在聊天记录里，也可能过几天就找不到。但是如果你把它存成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">prompts/xxx.txt<br></code></pre></td></tr></table></figure>
+
+<p>再把当次 prompt snapshot 写进 <code>.meta.json</code>，它就变成了可追溯的资产。</p>
+<p>总之，这次的结论是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">AI 很强，但工作流也很重要。<br></code></pre></td></tr></table></figure>
+
+<p>祝读到这里的你也能少一点被默认参数折磨的时刻，多一点“我说 16:9，它就真的是 16:9”的快乐。（狗头）</p>
+<blockquote>
+<p>本文配图使用 <a target="_blank" rel="noopener" href="https://github.com/AwakeFantasy/avilia-blog-illustrations">Avilia Blog Illustrations</a> 流程生成。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B0%8F%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3/" class="category-chain-item">小问题的解决</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/AI/" class="print-no-link">#AI</a>
+      
+        <a href="/tags/Codex/" class="print-no-link">#Codex</a>
+      
+        <a href="/tags/%E7%94%9F%E5%9B%BE/" class="print-no-link">#生图</a>
+      
+        <a href="/tags/%E4%B8%AD%E8%BD%AC%E7%AB%99/" class="print-no-link">#中转站</a>
+      
+        <a href="/tags/Skill/" class="print-no-link">#Skill</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>关于Codex中转站生图比例问题的解决记录</div>
+      <div>https://www.awakefantasy.top/2026/05/28/关于Codex中转站生图比例问题的解决记录/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>awakefantasy</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年5月30日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/23/%E8%81%8A%E8%81%8A%E8%BF%91%E5%86%B5%E5%92%8C%E6%9C%80%E8%BF%91%E5%81%9A%E7%9A%84%E8%B8%A9%E5%9D%91%E9%A1%B9%E7%9B%AE/" title="聊聊近况和最近做的踩坑项目">
+                        <span class="hidden-mobile">聊聊近况和最近做的踩坑项目</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"Sg6zY8ZdSYlbk3zWHBD4MZyU-gzGzoHsz","appKey":"4GJyueQihtV5hScY5AZ61pVO","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script defer src="/js/openkounter.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/post-metrics.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

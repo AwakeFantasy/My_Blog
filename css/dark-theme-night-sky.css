@@ -34,6 +34,12 @@ html:not([data-user-color-scheme]) #banner {
   background-size: cover;
 }
 
+html[data-user-color-scheme="dark"] #banner.banner-theme-swap,
+html[data-user-color-scheme="light"] #banner.banner-theme-swap,
+html:not([data-user-color-scheme]) #banner.banner-theme-swap {
+  background-image: none !important;
+}
+
 html[data-user-color-scheme="dark"] #banner.banner-theme-swap::before,
 html[data-user-color-scheme="light"] #banner.banner-theme-swap::before,
 html:not([data-user-color-scheme]) #banner.banner-theme-swap::before,
