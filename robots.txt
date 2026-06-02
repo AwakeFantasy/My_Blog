@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /archives/
+Disallow: /tags/
+Disallow: /categories/
+Disallow: /page/
+Disallow: /xml/local-search.xml
 Sitemap: https://www.awakefantasy.top/sitemap.xml
