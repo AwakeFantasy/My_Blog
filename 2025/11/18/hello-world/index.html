@@ -522,7 +522,7 @@
   <script type="module">
     Fluid.utils.loadComments('#waline', function() {
       Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
-      import('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js').then(({ init }) => {
+      import('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.mjs').then(({ init }) => {
         var options = Object.assign(
           {"serverURL":"https://waline.awakefantasy.top","path":"window.location.pathname","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
           {

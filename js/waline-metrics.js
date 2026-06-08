@@ -39,7 +39,7 @@
   const hasSiteStats = appendSiteStats();
   if (!hasPostPageview && !hasSiteStats) return;
 
-  import('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js')
+  import('/js/waline-esm.js')
     .then(({ pageviewCount }) => {
       if (typeof pageviewCount !== 'function') return;
 
