@@ -548,7 +548,7 @@
       
   <div id="waline"></div>
   <script type="module">
-    Fluid.utils.loadComments('#waline', function() {
+    Fluid.utils.listenDOMLoaded(function() {
       Fluid.utils.createCssLink('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.css')
       import('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.mjs').then(({ init }) => {
         var options = Object.assign(
