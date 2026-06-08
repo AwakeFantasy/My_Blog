@@ -19,8 +19,7 @@
   function appendPostPageview() {
     if (!document.querySelector('#waline')) return false;
 
-    const metaRows = document.querySelectorAll('#board-ctn .mt-1, .post-metas');
-    const metaRow = metaRows[0];
+    const metaRow = document.querySelector('#banner .banner-text > .mt-1');
     if (!metaRow || metaRow.querySelector('.waline-pageview-meta')) return false;
 
     const item = document.createElement('span');
