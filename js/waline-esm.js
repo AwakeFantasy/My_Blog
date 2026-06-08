@@ -4,4 +4,4 @@ export {
   pageviewCount,
   RecentComments,
   UserList
-} from 'https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.mjs';
+} from 'https://cdn.jsdelivr.net/npm/@waline/client@2.15.8/dist/waline.mjs';
