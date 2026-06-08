@@ -1,0 +1,74 @@
+(function () {
+  const waline = window.CONFIG?.waline || {};
+  const serverURL = waline.serverURL || 'https://waline.awakefantasy.top';
+  if (!serverURL) return;
+
+  const SITE_PV_PATH = '/__waline_site_pv__';
+  const SITE_UV_PATH = '/__waline_site_uv__';
+  const SITE_UV_KEY = 'waline-site-uv-counted';
+
+  function appendPostPageview() {
+    if (!document.querySelector('#waline')) return false;
+
+    const metaRows = document.querySelectorAll('#board-ctn .mt-1, .post-metas');
+    const metaRow = metaRows[0];
+    if (!metaRow || metaRow.querySelector('.waline-pageview-meta')) return false;
+
+    const item = document.createElement('span');
+    item.className = 'post-meta mr-2 waline-pageview-meta';
+    item.innerHTML = '<i class="iconfont icon-eye" aria-hidden="true"></i> <span class="waline-pageview-count">--</span> \u6b21';
+    metaRow.appendChild(item);
+    return true;
+  }
+
+  function appendSiteStats() {
+    const footer = document.querySelector('footer .footer-inner');
+    if (!footer || footer.querySelector('.waline-site-statistics')) return false;
+
+    const stats = document.createElement('div');
+    stats.className = 'statistics waline-site-statistics';
+    stats.innerHTML = [
+      '<span>\u603b\u8bbf\u95ee\u91cf <span class="waline-site-pv">--</span> \u6b21</span>',
+      '<span class="waline-site-uv-wrap"> | \u603b\u8bbf\u5ba2\u6570 <span class="waline-site-uv">--</span> \u4eba</span>'
+    ].join('');
+    footer.appendChild(stats);
+    return true;
+  }
+
+  const hasPostPageview = appendPostPageview();
+  const hasSiteStats = appendSiteStats();
+  if (!hasPostPageview && !hasSiteStats) return;
+
+  import('https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/waline.js')
+    .then(({ pageviewCount }) => {
+      if (typeof pageviewCount !== 'function') return;
+
+      if (hasPostPageview) {
+        pageviewCount({
+          serverURL,
+          path: window.location.pathname,
+          selector: '.waline-pageview-count',
+          update: true
+        });
+      }
+
+      if (hasSiteStats) {
+        pageviewCount({
+          serverURL,
+          path: SITE_PV_PATH,
+          selector: '.waline-site-pv',
+          update: true
+        });
+
+        const shouldCountUv = localStorage.getItem(SITE_UV_KEY) !== '1';
+        pageviewCount({
+          serverURL,
+          path: SITE_UV_PATH,
+          selector: '.waline-site-uv',
+          update: shouldCountUv
+        });
+        if (shouldCountUv) localStorage.setItem(SITE_UV_KEY, '1');
+      }
+    })
+    .catch(err => console.warn('[waline-metrics] pageview failed:', err));
+})();
