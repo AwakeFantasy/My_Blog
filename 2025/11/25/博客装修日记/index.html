@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.awakefantasy.top/2025/11/25/%E5%8D%9A%E5%AE%A2%E8%A3%85%E4%BF%AE%E6%97%A5%E8%AE%B0/xiaoa-01-cover-blog-renovation.png">
 <meta property="article:published_time" content="2025-11-25T06:24:51.000Z">
-<meta property="article:modified_time" content="2026-05-30T09:31:54.403Z">
+<meta property="article:modified_time" content="2026-06-08T14:48:06.736Z">
 <meta property="article:author" content="awakefantasy">
 <meta property="article:tag" content="杂七杂八">
 <meta name="twitter:card" content="summary_large_image">
@@ -352,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          885 字
+          1.6k 字
         
       </span>
     
@@ -363,7 +363,7 @@
         
         
         
-          8 分钟
+          14 分钟
         
       </span>
     
@@ -411,7 +411,13 @@
 <span id="more"></span>
 
 <p>博客有什么大的变动，我应该会第一时间写在这里。</p>
-<h4 id="现在"><a href="#现在" class="headerlink" title="现在"></a>现在</h4><p><strong>2025-12-20</strong></p>
+<h4 id="现在"><a href="#现在" class="headerlink" title="现在"></a>现在</h4><p><strong>2026-06-08</strong></p>
+<p>今天把博客的评论区和阅读量统计从 LeanCloud 迁移到了 Waline。</p>
+<p>一开始只是想找一个 LeanCloud 的替代品，后来发现 Waline 正好可以同时承担评论区、文章阅读量、全站访问量这些功能，于是就顺手把这一块重新整理了一遍。部署过程比想象中绕一点：Waline 部署在 Vercel 上，数据库用的是 Neon PostgreSQL，评论服务绑定到了 <code>waline.awakefantasy.top</code> 这个子域名。</p>
+<p>迁移过程中还踩到了 Fluid 主题 1.9.9 的 Waline 加载问题。文章页明明有 <code>#waline</code> 容器，但 Fluid 的懒加载逻辑在某些情况下只等待“之后新增的元素”，导致 Waline 评论区不会真正初始化。查了一下上游 issue 和 PR，发现相关 PR 主要修的是 Waline CDN 和新版 DOM 选择器问题，并没有完整解决这个懒加载触发问题。最后在本地用 Hexo 渲染补丁绕过了这层问题，让评论区稳定显示。</p>
+<p>旧数据也没有直接丢掉。我把 LeanCloud 导出的 <code>Comment</code> 和 <code>Counter</code> 数据转换后增量导入到了 Waline 的 PostgreSQL 表里，评论、文章阅读量、全站 PV&#x2F;UV 都尽量保留下来了。中间还遇到了一点路径编码问题：LeanCloud 里保存的是中文解码路径，而浏览器里的 <code>window.location.pathname</code> 默认可能是 URL 编码后的路径，所以最后统一把文章阅读量路径规范化到中文解码路径，避免同一篇文章被统计成两条记录。</p>
+<p>顺手还补了一些展示细节：现在首页每篇文章后面会显示对应阅读量；文章页顶部的元信息里，也会在“字数 &#x2F; 阅读时间”后面显示阅读量；页脚则显示全站 PV&#x2F;UV。整体上评论和统计这一块终于从“能用但分散”变成了“统一依赖 Waline”，以后维护起来应该会轻松很多。</p>
+<p><strong>2025-12-20</strong></p>
 <p>在bing连着交了一个月的请求编制索引，前前后后改了很多东西，包括robots文件等，终于给我收录了~</p>
 <img src="/2025/11/25/%E5%8D%9A%E5%AE%A2%E8%A3%85%E4%BF%AE%E6%97%A5%E8%AE%B0/xiaoa-04-indexing-search-engines.png" srcset="/img/loading.gif" lazyload class="" title="indexing-search-engines">
 
@@ -494,7 +500,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2026年5月30日</div>
+          <div>2026年6月8日</div>
         </div>
       
       
