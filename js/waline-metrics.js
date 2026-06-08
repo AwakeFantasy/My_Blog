@@ -7,6 +7,15 @@
   const SITE_UV_PATH = '/__waline_site_uv__';
   const SITE_UV_KEY = 'waline-site-uv-counted';
 
+  function normalizePath(pathname) {
+    const normalized = pathname.replace(/\/*(index.html)?$/, '/');
+    try {
+      return decodeURI(normalized);
+    } catch (e) {
+      return normalized;
+    }
+  }
+
   function appendPostPageview() {
     if (!document.querySelector('#waline')) return false;
 
@@ -46,7 +55,7 @@
       if (hasPostPageview) {
         pageviewCount({
           serverURL,
-          path: window.location.pathname,
+          path: normalizePath(window.location.pathname),
           selector: '.waline-pageview-count',
           update: true
         });
