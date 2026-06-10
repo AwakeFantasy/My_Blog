@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.awakefantasy.top/2025/11/25/%E5%8D%9A%E5%AE%A2%E8%A3%85%E4%BF%AE%E6%97%A5%E8%AE%B0/xiaoa-01-cover-blog-renovation.png">
 <meta property="article:published_time" content="2025-11-25T06:24:51.000Z">
-<meta property="article:modified_time" content="2026-06-08T15:06:50.817Z">
+<meta property="article:modified_time" content="2026-06-10T15:23:38.368Z">
 <meta property="article:author" content="awakefantasy">
 <meta property="article:tag" content="杂七杂八">
 <meta name="twitter:card" content="summary_large_image">
@@ -378,7 +378,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          2k 字
         
       </span>
     
@@ -389,7 +389,7 @@
         
         
         
-          14 分钟
+          17 分钟
         
       </span>
     
@@ -437,7 +437,12 @@
 <span id="more"></span>
 
 <p>博客有什么大的变动，我应该会第一时间写在这里。</p>
-<h4 id="现在"><a href="#现在" class="headerlink" title="现在"></a>现在</h4><p><strong>2026-06-08</strong></p>
+<h4 id="现在"><a href="#现在" class="headerlink" title="现在"></a>现在</h4><p><strong>2026-06-10</strong></p>
+<p>今天给博客加了一个<a href="/traffic/">访问统计页</a>，用来把全站访问量做成折线图。</p>
+<p>实现方式比较朴素：Waline 继续负责实时累计 PV&#x2F;UV，GitHub Actions 每天定时从 Waline 的 Neon 数据库里抄一次当前总数，写进静态 JSON，然后页面用 ECharts 画出来。这样读者看页面时只是在读静态文件，不需要直接碰数据库。</p>
+<p>顺手也把“访问统计”放进了顶部导航，页脚的“总访问量 &#x2F; 总访客数”也可以点进去看趋势。中间还踩了个小坑：把页脚统计改成链接时破坏了 Fluid 原来的布局，导致数字不居中，最后保留原来的 <code>span</code> 结构，只把里面的文字包成链接，才恢复正常。</p>
+<p>另外，把自定义页面和 404 页的默认头图从 Fluid 默认图换成了主页白天图，看起来统一一点。</p>
+<p><strong>2026-06-08</strong></p>
 <p>今天把博客的评论区和阅读量统计从 LeanCloud 迁移到了 Waline。</p>
 <p>一开始只是想找一个 LeanCloud 的替代品，后来发现 Waline 正好可以同时承担评论区、文章阅读量、全站访问量这些功能，于是就顺手把这一块重新整理了一遍。部署过程比想象中绕一点：Waline 部署在 Vercel 上，数据库用的是 Neon PostgreSQL，评论服务绑定到了 <code>waline.awakefantasy.top</code> 这个子域名。</p>
 <p>迁移过程中还踩到了 Fluid 主题 1.9.9 的 Waline 加载问题。文章页明明有 <code>#waline</code> 容器，但 Fluid 的懒加载逻辑在某些情况下只等待“之后新增的元素”，导致 Waline 评论区不会真正初始化。查了一下上游 issue 和 PR，发现相关 PR 主要修的是 Waline CDN 和新版 DOM 选择器问题，并没有完整解决这个懒加载触发问题。最后在本地用 Hexo 渲染补丁绕过了这层问题，让评论区稳定显示。</p>
@@ -525,7 +530,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2026年6月8日</div>
+          <div>2026年6月10日</div>
         </div>
       
       
