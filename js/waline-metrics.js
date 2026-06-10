@@ -36,8 +36,8 @@
     const stats = document.createElement('div');
     stats.className = 'statistics waline-site-statistics';
     stats.innerHTML = [
-      '<span>\u603b\u8bbf\u95ee\u91cf <span class="waline-site-pv">--</span> \u6b21</span>',
-      '<span class="waline-site-uv-wrap"> | \u603b\u8bbf\u5ba2\u6570 <span class="waline-site-uv">--</span> \u4eba</span>'
+      '<a href="/traffic/" title="\u67e5\u770b\u8bbf\u95ee\u7edf\u8ba1\u8d8b\u52bf">\u603b\u8bbf\u95ee\u91cf <span class="waline-site-pv">--</span> \u6b21</a>',
+      '<span class="waline-site-uv-wrap"> | <a href="/traffic/" title="\u67e5\u770b\u8bbf\u95ee\u7edf\u8ba1\u8d8b\u52bf">\u603b\u8bbf\u5ba2\u6570 <span class="waline-site-uv">--</span> \u4eba</a></span>'
     ].join('');
     footer.appendChild(stats);
     return true;
