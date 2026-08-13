@@ -446,5 +446,12 @@
     "uv": 789,
     "source": "waline",
     "capturedAt": "2026-08-12T17:09:57.729Z"
+  },
+  {
+    "date": "2026-08-14",
+    "pv": 1325,
+    "uv": 789,
+    "source": "waline",
+    "capturedAt": "2026-08-13T17:09:54.647Z"
   }
 ]
