@@ -9,6 +9,7 @@
   var IDLE_PRICE_STEP = 0.03;
   var IDLE_RANDOM_STEPS = 8;
   var IDLE_RANGE = 0.12;
+  var IDLE_WICK_LIMIT = 0.015;
   var PRICE_PER_PIXEL_RATIO = 0.0000004;
   var ENTRY_PRICE = 100;
   var INITIAL_ASSETS = 100000;
@@ -210,7 +211,8 @@
     }
 
     function closeWindow() {
-      if (!scrolledThisWindow) {
+      var generatedIdleCandle = !scrolledThisWindow;
+      if (generatedIdleCandle) {
         for (var i = 0; i < IDLE_RANDOM_STEPS; i += 1) {
           var meanReversion = (idleCenter - price) * 0.35;
           var randomMove = (Math.random() - 0.5) * IDLE_PRICE_STEP;
@@ -219,6 +221,10 @@
           low = Math.min(low, price);
           checkLiquidation();
         }
+      }
+      if (generatedIdleCandle) {
+        high = Math.min(high, Math.max(open, price) + IDLE_WICK_LIMIT);
+        low = Math.max(low, Math.min(open, price) - IDLE_WICK_LIMIT);
       }
       candles.push({ open: open, high: high, low: low, close: price, time: Date.now() });
       while (candles.length > baseCandleCount + LIVE_CANDLE_LIMIT - 1) {
