@@ -1,0 +1,215 @@
+/* Scroll driven candlestick background and chart readouts. */
+.kline-scroll-layer {
+  --kline-up: #c94770;
+  --kline-down: #258895;
+  --kline-grid: rgba(55, 84, 110, 0.16);
+  --kline-axis: rgba(55, 84, 110, 0.38);
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 1;
+  visibility: hidden;
+  contain: paint;
+  transition: visibility 160ms ease;
+}
+
+body.kline-mode-on .kline-scroll-layer { visibility: visible; }
+body.kline-mode-on .kline-scroll-layer__grid,
+body.kline-mode-on .kline-scroll-layer__history,
+body.kline-mode-on .kline-scroll-layer__hud,
+body.kline-mode-on .kline-scroll-layer__crosshair { opacity: 0.66; }
+
+.kline-scroll-layer__frame { position: absolute; inset: 0 38px 0 0; overflow: hidden; }
+
+.kline-scroll-layer__grid {
+  position: absolute;
+  inset: 0;
+  border-top: 1px solid var(--kline-axis);
+  border-bottom: 1px solid var(--kline-axis);
+  background-image:
+    linear-gradient(to bottom, transparent 49.8%, var(--kline-axis) 50%, transparent 50.2%),
+    repeating-linear-gradient(to right, transparent 0, transparent calc(12.5% - 1px), var(--kline-grid) 12.5%),
+    repeating-linear-gradient(to bottom, transparent 0, transparent calc(16.666% - 1px), var(--kline-grid) 16.666%);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+.kline-scroll-layer__history { position: absolute; inset: 0; will-change: transform; }
+.kline-candle { position: absolute; top: 0; bottom: 0; width: clamp(5px, 0.52vw, 9px); transform: translateX(-50%); }
+.kline-candle__wick, .kline-candle__body { position: absolute; left: 50%; transform: translateX(-50%); }
+.kline-candle__wick { top: var(--wick-top); height: var(--wick-height); width: 1px; background: currentColor; opacity: 0.72; }
+.kline-candle__body { top: var(--body-top); height: max(1px, var(--body-height)); width: 100%; background: currentColor; box-shadow: 0 0 8px color-mix(in srgb, currentColor 40%, transparent); }
+.kline-candle.is-up { color: var(--kline-up); }
+.kline-candle.is-down { color: var(--kline-down); }
+
+.kline-scroll-layer__hud {
+  position: absolute;
+  top: 84px;
+  left: clamp(12px, 1.5vw, 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 230px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-color);
+  border-radius: 0.5rem;
+  background: var(--board-bg-color);
+  color: var(--text-color);
+  font: 500 12px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.18), 0 17px 36px 0 rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.kline-scroll-layer__hud-position { margin-bottom: 2px; font-weight: 700; }
+.kline-scroll-layer__hud-row strong { color: var(--text-color); font-weight: 700; }
+.kline-scroll-layer__hud-pnl { display: flex; align-items: baseline; gap: 5px; color: var(--sec-text-color); }
+.kline-scroll-layer__hud-pnl strong { color: var(--kline-down); font-size: 14px; }
+.kline-scroll-layer__hud-pnl small { color: var(--sec-text-color); font-size: 11px; }
+.kline-scroll-layer__hud-pnl.is-profit strong { color: var(--kline-up); }
+.kline-scroll-layer__hud-pnl.is-loss strong { color: var(--kline-down); }
+
+.kline-scroll-layer__crosshair { display: none; }
+.kline-scroll-layer__crosshair.is-active { display: block; }
+.kline-scroll-layer__crosshair::before, .kline-scroll-layer__crosshair::after {
+  position: absolute;
+  content: "";
+  border-color: rgba(69, 91, 120, 0.62);
+  border-style: dashed;
+}
+.kline-scroll-layer__crosshair::before {
+  top: 0;
+  bottom: 0;
+  left: var(--pointer-x);
+  border-width: 0 0 0 1px;
+}
+.kline-scroll-layer__crosshair::after {
+  right: 0;
+  left: 0;
+  top: var(--pointer-y);
+  border-width: 1px 0 0;
+}
+.kline-scroll-layer__time, .kline-scroll-layer__price {
+  position: fixed;
+  z-index: 2;
+  display: block;
+  min-width: 70px;
+  padding: 4px 6px;
+  border: 1px solid rgba(100, 115, 136, 0.35);
+  border-radius: 2px;
+  background: rgba(247, 249, 252, 0.94);
+  color: var(--text-color);
+  text-align: center;
+  font: 600 11px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+  box-shadow: 0 2px 8px rgba(20, 28, 40, 0.12);
+  backdrop-filter: blur(8px);
+}
+.kline-scroll-layer__time { left: var(--pointer-x); bottom: 8px; }
+.kline-scroll-layer__price { right: 0; top: var(--pointer-y); color: var(--kline-down); }
+
+.kline-scroll-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+  cursor: pointer;
+  color: var(--navbar-text-color) !important;
+  text-decoration: none !important;
+}
+.kline-scroll-toggle:hover, .kline-scroll-toggle[aria-pressed="true"] { color: var(--link-hover-color) !important; }
+.kline-scroll-toggle__label { font-size: 0.82rem; }
+.kline-scroll-toggle i { font-size: 1rem; }
+#mobile-kline-toggle .mobile-grid-item { cursor: pointer; }
+
+/* Keep the floating article outline readable above the chart. */
+#toc {
+  position: relative;
+  z-index: 2;
+  padding: 14px 16px;
+  border: 1px solid var(--line-color);
+  border-radius: 0.5rem;
+  background: var(--board-bg-color);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.18), 0 17px 36px 0 rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+}
+
+body.kline-mode-on #board {
+  background-color: rgba(255, 255, 255, 0.68) !important;
+}
+
+body.kline-mode-on .sidebar {
+  z-index: 3;
+}
+
+body.kline-mode-on #toc {
+  background-color: rgba(255, 255, 255, 0.24) !important;
+}
+
+html[data-user-color-scheme="dark"] .kline-scroll-layer {
+  --kline-up: #ff9fc7;
+  --kline-down: #4fdfdf;
+  --kline-grid: rgba(176, 205, 238, 0.18);
+  --kline-axis: rgba(176, 205, 238, 0.34);
+}
+html[data-user-color-scheme="dark"] .kline-scroll-layer__hud,
+html[data-user-color-scheme="dark"] .kline-scroll-layer__time,
+html[data-user-color-scheme="dark"] .kline-scroll-layer__price { background: var(--board-bg-color); color: var(--text-color); }
+html[data-user-color-scheme="dark"] #toc {
+  border-color: var(--line-color);
+}
+html[data-user-color-scheme="dark"] body.kline-mode-on #board {
+  background-color: rgba(8, 14, 28, 0.72) !important;
+}
+html[data-user-color-scheme="dark"] body.kline-mode-on #toc {
+  background-color: rgba(8, 14, 28, 0.38) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-user-color-scheme]) .kline-scroll-layer {
+    --kline-up: #ff9fc7;
+    --kline-down: #4fdfdf;
+    --kline-grid: rgba(176, 205, 238, 0.18);
+    --kline-axis: rgba(176, 205, 238, 0.34);
+  }
+  html:not([data-user-color-scheme]) .kline-scroll-layer__hud,
+  html:not([data-user-color-scheme]) .kline-scroll-layer__time,
+  html:not([data-user-color-scheme]) .kline-scroll-layer__price { background: var(--board-bg-color); color: var(--text-color); }
+  html:not([data-user-color-scheme]) #toc { border-color: var(--line-color); }
+  html:not([data-user-color-scheme]) body.kline-mode-on #board {
+    background-color: rgba(8, 14, 28, 0.72) !important;
+  }
+  html:not([data-user-color-scheme]) body.kline-mode-on #toc {
+    background-color: rgba(8, 14, 28, 0.38) !important;
+  }
+}
+
+#banner .mask::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: var(--body-bg-color);
+  opacity: 0;
+  transition: opacity 540ms ease;
+}
+body.kline-mode-on #banner .mask::before { opacity: 1; }
+body.kline-mode-on #banner .banner-text { position: relative; z-index: 3; }
+body.kline-mode-on #seo-header,
+body.kline-mode-on .markdown-body [id] { scroll-margin-top: 92px; }
+
+@media (max-width: 767px) {
+  body.kline-mode-on .kline-scroll-layer__grid,
+  body.kline-mode-on .kline-scroll-layer__history,
+  body.kline-mode-on .kline-scroll-layer__hud,
+  body.kline-mode-on .kline-scroll-layer__crosshair { opacity: 0.5; }
+  .kline-scroll-layer__frame { right: 34px; }
+  .kline-scroll-layer__hud { top: 72px; left: 8px; min-width: 206px; padding: 10px 12px; font-size: 10px; }
+  .kline-scroll-layer__time, .kline-scroll-layer__price { min-width: 58px; padding: 4px 3px; font-size: 10px; }
+  .kline-scroll-toggle__label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .kline-scroll-layer { transition: none; } }
+@media print { .kline-scroll-layer { display: none; } }
